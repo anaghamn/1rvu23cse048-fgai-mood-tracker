@@ -1,96 +1,310 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <script defer src="/_vercel/insights/script.js"></script>
-    <link
-      rel="stylesheet"
-      href="https://cdn.jsdelivr.net/npm/@exampledev/new.css@1.1.2/new.min.css"
-    />
-    <title>Vercel HTML Starter</title>
-    <meta
-      name="description"
-      content="High-performance HTML based website template."
-    />
-  </head>
-  <body>
-    <h1>Vercel HTML Starter</h1>
-    <p>
-      This template is a simple, but powerful single
-      <code>index.html</code> file deployed to
-      <a href="https://vercel.com">Vercel</a>. When your site is deployed, all
-      static assets (like HTML, JavaScript, CSS, images, and more) are deployed
-      globally to every
-      <a href="https://vercel.com/docs/concepts/edge-network/overview"
-        >Vercel Edge Network</a
-      >
-      region.
-    </p>
-    <h2>Simple, privacy-friendly analytics</h2>
-    <p>
-      Want to understand your visitor traffic? Vercel Analytics gives you
-      first-party, privacy-friendly traffic analytics for your HTML site. This
-      template is already configured using the following script:
-    </p>
-    <pre><code>&lt;script defer src="/_vercel/insights/script.js"&gt;&lt;/script&gt;</code></pre>
-    <p>
-      Learn more about
-      <a href="https://vercel.com/analytics">Vercel Analytics</a>.
-    </p>
-    <h2>Integrated with git</h2>
-    <p>
-      Deploying updates to your site is as simple as
-      <code>git push</code> thanks to Vercel's advanced
-      <a href="https://vercel.com/docs/concepts/git">Git Integration</a>.
-      Support for GitHub, GitLab, Bitbucket is zero-configuration, and with the
-      flexible Vercel CLI and API, you can integrate with any tool possible.
-    </p>
-    <p>
-      Learn more about
-      <a href="https://vercel.com/docs/concepts/git">Git Integration</a>.
-    </p>
-    <h2>Fast <code>gzip</code> compression</h2>
-    <p>
-      To help ensure the smallest possible file sizes for your static assets,
-      the Vercel Edge Network compresses files by default using
-      <code>gzip</code>. You can also optionally use
-      <code>brotli</code> compressesion if you prefer.
-    </p>
-    <p>
-      Learn more about
-      <a href="https://vercel.com/docs/concepts/edge-network/compression"
-        >compression</a
-      >.
-    </p>
-    <h2>Advanced routing configuration</h2>
-    <p>
-      Vercel gives you a variety of ways to configure the routing of your
-      website. For example, adding redirects, rewrites, or headers to your page.
-      While you can use <code>vercel.json</code> to define these through JSON,
-      you can also express your routing configuration as code using
-      <a href="https://vercel.com/docs/concepts/functions/edge-middleware"
-        >Vercel Edge Middleware</a
-      >.
-    </p>
-    <p>
-      Middleware runs before the
-      <a href="https://vercel.com/docs/concepts/edge-network/caching"
-        >Vercel Edge Network Cache</a
-      >, so you can configure routing exactly as your application needs. For
-      example, this template uses <code>middleware.js</code> defined in the root
-      of the repository to add additional security headers to the site:
-    </p>
-    <pre><code>referrer-policy: origin-when-cross-origin
-strict-transport-security: max-age=31536000; includeSubDomains; preload
-x-content-type-options: nosniff
-x-dns-prefetch-control: on
-x-frame-options: DENY</code></pre>
-    <p>
-      Learn more about
-      <a href="https://vercel.com/docs/concepts/functions/edge-middleware"
-        >Vercel Edge Middleware</a
-      >.
-    </p>
-  </body>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Daily Mood Tracker</title>
+  <style>
+    /* Reset and base styles */
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      background: linear-gradient(135deg, #fff0f5 0%, #f0f8ff 25%, #f0fff0 50%, #fff8f0 75%, #f5f0ff 100%);
+      color: #4a4055;
+      padding: 2rem;
+    }
+
+    /* Main container - centered layout */
+    .container {
+      max-width: 600px;
+      width: 100%;
+      text-align: center;
+    }
+
+    h1 {
+      font-size: 1.75rem;
+      font-weight: 600;
+      margin-bottom: 0.5rem;
+      color: #2d5a6b;
+    }
+
+    .subtitle {
+      font-size: 0.95rem;
+      color: #5a6b7a;
+      margin-bottom: 2rem;
+    }
+
+    /* Mood buttons - big, soft, clickable */
+    .mood-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem;
+      justify-content: center;
+      margin-bottom: 2rem;
+    }
+
+    .mood-btn {
+      flex: 1 1 100px;
+      min-width: 90px;
+      padding: 1.25rem 0.75rem;
+      border-radius: 12px;
+      border: 2px solid;
+      background: #fff;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      font-size: 2rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    /* Each mood gets its own pastel color */
+    .mood-btn[data-mood="very-happy"] { border-color: #f0d884; background: #fffef0; }
+    .mood-btn[data-mood="happy"]       { border-color: #8ed4a8; background: #f0fff4; }
+    .mood-btn[data-mood="neutral"]     { border-color: #7eb8e0; background: #f0f8ff; }
+    .mood-btn[data-mood="sad"]         { border-color: #e8b898; background: #fff8f0; }
+    .mood-btn[data-mood="very-sad"]    { border-color: #c4a8d8; background: #faf5ff; }
+
+    .mood-btn[data-mood="very-happy"]:hover { background: #fff9d4; border-color: #e0c060; transform: translateY(-2px); }
+    .mood-btn[data-mood="happy"]:hover       { background: #d4f0e0; border-color: #6ab88a; transform: translateY(-2px); }
+    .mood-btn[data-mood="neutral"]:hover     { background: #d4e8f8; border-color: #5a9cc8; transform: translateY(-2px); }
+    .mood-btn[data-mood="sad"]:hover         { background: #ffe8d8; border-color: #d09870; transform: translateY(-2px); }
+    .mood-btn[data-mood="very-sad"]:hover    { background: #ede0f5; border-color: #a888c8; transform: translateY(-2px); }
+
+    /* Subtle scale animation when mood is clicked */
+    @keyframes moodPop {
+      0%   { transform: scale(1); }
+      50%  { transform: scale(1.06); }
+      100% { transform: scale(1); }
+    }
+
+    .mood-btn.pop {
+      animation: moodPop 0.35s ease;
+    }
+
+    /* Selected: stronger tint of each mood's color */
+    .mood-btn[data-mood="very-happy"].selected { background: #fff4c4; border-color: #d4a830; box-shadow: 0 4px 12px rgba(212, 168, 48, 0.35); }
+    .mood-btn[data-mood="happy"].selected       { background: #b8e8c8; border-color: #5a9c6a; box-shadow: 0 4px 12px rgba(90, 156, 106, 0.35); }
+    .mood-btn[data-mood="neutral"].selected     { background: #b8d8f0; border-color: #4a8cb8; box-shadow: 0 4px 12px rgba(74, 140, 184, 0.35); }
+    .mood-btn[data-mood="sad"].selected         { background: #ffdcc4; border-color: #c07850; box-shadow: 0 4px 12px rgba(192, 120, 80, 0.35); }
+    .mood-btn[data-mood="very-sad"].selected    { background: #e0d0f0; border-color: #9070b0; box-shadow: 0 4px 12px rgba(144, 112, 176, 0.35); }
+
+    .mood-btn .label {
+      font-size: 0.75rem;
+      color: #4a5568;
+      font-weight: 500;
+    }
+
+    /* Message area – soft mint/green */
+    .message-box {
+      min-height: 3rem;
+      padding: 1rem 1.5rem;
+      margin-bottom: 2rem;
+      background: #f0fff8;
+      border-radius: 10px;
+      border: 1px solid #a8d8c8;
+      font-size: 1rem;
+      color: #2d5a4a;
+    }
+
+    .message-box.empty {
+      color: #6b8a7a;
+      font-style: italic;
+    }
+
+    /* Small timestamp */
+    .last-mood-time {
+      font-size: 0.8rem;
+      color: #5a6b7a;
+      margin-top: 0.5rem;
+      margin-bottom: 1.5rem;
+    }
+
+    /* Summary section – soft peach/coral */
+    .summary {
+      background: #fff8f5;
+      border-radius: 10px;
+      border: 1px solid #e8c8b8;
+      padding: 1.25rem 1.5rem;
+      text-align: left;
+    }
+
+    .summary h2 {
+      font-size: 1rem;
+      font-weight: 600;
+      color: #8b5a4a;
+      margin-bottom: 0.75rem;
+    }
+
+    .summary-list {
+      list-style: none;
+    }
+
+    .summary-list li {
+      display: flex;
+      justify-content: space-between;
+      padding: 0.35rem 0;
+      font-size: 0.9rem;
+      color: #5a4a3a;
+    }
+
+    .summary-list .count {
+      font-weight: 600;
+      color: #6a5a4a;
+    }
+
+    .today-mood-value {
+      font-size: 1rem;
+      color: #5a4a3a;
+      margin-bottom: 0.5rem;
+    }
+
+    .today-mood-value.empty {
+      color: #8a7a6a;
+      font-style: italic;
+    }
+
+    /* Reset today button – soft blue */
+    .reset-btn {
+      margin-top: 1.5rem;
+      padding: 0.6rem 1.25rem;
+      border: 2px solid #a8c8e0;
+      border-radius: 10px;
+      background: #f5faff;
+      color: #4a6a8a;
+      font-size: 0.9rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .reset-btn:hover {
+      background: #e0eef8;
+      border-color: #78a8c8;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Daily Mood Tracker</h1>
+    <p class="subtitle">How are you feeling today? Click a mood below.</p>
+
+    <!-- 5 mood options as big emoji buttons -->
+    <div class="mood-grid">
+      <button type="button" class="mood-btn" data-mood="very-happy" data-message="You're feeling very happy today!">
+        <span class="emoji">😄</span>
+        <span class="label">Very Happy</span>
+      </button>
+      <button type="button" class="mood-btn" data-mood="happy" data-message="You're feeling happy today!">
+        <span class="emoji">🙂</span>
+        <span class="label">Happy</span>
+      </button>
+      <button type="button" class="mood-btn" data-mood="neutral" data-message="You're feeling neutral today.">
+        <span class="emoji">😐</span>
+        <span class="label">Neutral</span>
+      </button>
+      <button type="button" class="mood-btn" data-mood="sad" data-message="You're feeling sad today. Hope things get better!">
+        <span class="emoji">😢</span>
+        <span class="label">Sad</span>
+      </button>
+      <button type="button" class="mood-btn" data-mood="very-sad" data-message="You're feeling very sad today. Sending you support.">
+        <span class="emoji">😞</span>
+        <span class="label">Very Sad</span>
+      </button>
+    </div>
+
+    <!-- Short message shown when user selects a mood -->
+    <div class="message-box empty" id="messageBox">
+      Select a mood above to see your message.
+    </div>
+    <div class="last-mood-time" id="lastMoodTime"></div>
+
+    <!-- Today's mood: only one selection per day -->
+    <section class="summary">
+      <h2>Today's mood</h2>
+      <p class="today-mood-value" id="todayMoodValue">None selected</p>
+      <button type="button" class="reset-btn" id="resetBtn">Reset today</button>
+    </section>
+  </div>
+
+  <script>
+    // Only one mood per day: store the single selection (or null)
+    const moodLabels = {
+      'very-happy': 'Very Happy',
+      'happy': 'Happy',
+      'neutral': 'Neutral',
+      'sad': 'Sad',
+      'very-sad': 'Very Sad'
+    };
+    let todayMood = null;
+
+    const messageBox = document.getElementById('messageBox');
+    const todayMoodValue = document.getElementById('todayMoodValue');
+    const moodButtons = document.querySelectorAll('.mood-btn');
+
+    // Update the "Today's mood" display
+    function updateTodayMoodDisplay() {
+      if (todayMood === null) {
+        todayMoodValue.textContent = 'None selected';
+        todayMoodValue.classList.add('empty');
+      } else {
+        todayMoodValue.textContent = moodLabels[todayMood];
+        todayMoodValue.classList.remove('empty');
+      }
+    }
+
+    // Attach click handler to each mood button
+    moodButtons.forEach((btn) => {
+      btn.addEventListener('click', () => {
+        const mood = btn.getAttribute('data-mood');
+        const message = btn.getAttribute('data-message');
+
+        // Set today's single mood (selecting a new mood replaces the previous)
+        todayMood = mood;
+        updateTodayMoodDisplay();
+
+        // Highlight only the clicked mood (remove others, add selected to this)
+        moodButtons.forEach((b) => b.classList.remove('selected'));
+        btn.classList.add('selected');
+
+        // Play subtle scale animation on click
+        btn.classList.remove('pop');
+        btn.offsetWidth; // force reflow so animation can run again
+        btn.classList.add('pop');
+        btn.addEventListener('animationend', () => btn.classList.remove('pop'), { once: true });
+
+        // Display the friendly message for this mood
+        messageBox.textContent = message;
+        messageBox.classList.remove('empty');
+
+        // Show timestamp: Last mood selected at HH:MM
+        const now = new Date();
+        const hh = String(now.getHours()).padStart(2, '0');
+        const mm = String(now.getMinutes()).padStart(2, '0');
+        document.getElementById('lastMoodTime').textContent = 'Last mood selected at ' + hh + ':' + mm;
+      });
+    });
+
+    // Reset today: clear today's mood, remove highlight, reset message
+    document.getElementById('resetBtn').addEventListener('click', () => {
+      todayMood = null;
+      updateTodayMoodDisplay();
+      moodButtons.forEach((b) => b.classList.remove('selected'));
+      messageBox.textContent = 'Select a mood above to see your message.';
+      messageBox.classList.add('empty');
+      document.getElementById('lastMoodTime').textContent = '';
+    });
+  </script>
+</body>
 </html>
